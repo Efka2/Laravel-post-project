@@ -21282,7 +21282,7 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed (from ./node_modules/css-loader/index.js):\nModuleBuildError: Module build failed (from ./node_modules/postcss-loader/src/index.js):\nError: Failed to find '~@fortawesome/fontawesome-free/scss/brands'\n  in [\n    C:\\xampp\\htdocs\\LaravelProject\\resources\\css\n  ]\n    at C:\\xampp\\htdocs\\LaravelProject\\node_modules\\postcss-import\\lib\\resolve-id.js:35:13\n    at C:\\xampp\\htdocs\\LaravelProject\\node_modules\\webpack\\lib\\NormalModule.js:316:20\n    at C:\\xampp\\htdocs\\LaravelProject\\node_modules\\loader-runner\\lib\\LoaderRunner.js:367:11\n    at C:\\xampp\\htdocs\\LaravelProject\\node_modules\\loader-runner\\lib\\LoaderRunner.js:233:18\n    at context.callback (C:\\xampp\\htdocs\\LaravelProject\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at C:\\xampp\\htdocs\\LaravelProject\\node_modules\\postcss-loader\\src\\index.js:208:9");
 
 /***/ }),
 
@@ -21338,8 +21338,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\LaravelProject\PostProject\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\LaravelProject\PostProject\resources\css\app.css */"./resources/css/app.css");
+__webpack_require__(/*! C:\xampp\htdocs\LaravelProject\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\LaravelProject\resources\css\app.css */"./resources/css/app.css");
 
 
 /***/ })
