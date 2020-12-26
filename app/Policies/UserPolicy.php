@@ -3,10 +3,9 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Post;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PostPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -20,7 +19,7 @@ class PostPolicy
         //
     }
 
-    public function delete(User $user, Post $post){
-        return $post->user_id === $user->id;
+    public function changeProfileInfo(User $user, User $profileUser){
+        return $profileUser->id === $user->id;
     }
 }

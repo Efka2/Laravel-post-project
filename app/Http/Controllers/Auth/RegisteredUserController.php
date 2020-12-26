@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisteredUserController extends Controller
 {
+    public function show(User $user){
+        //dd($user);
+        //        $posts = Post::latest()->with(['likes','user'])->paginate(10);
+        //$user = $user->with(['receivedLikes','posts']);
+        return view('auth.profile',compact('user'))->with(['posts','receivedLikes','comments']);
+    }
+
+    public function edit(Request $request, User $user){
+        //dd($user);
+        return view('auth.profileEdit',compact('user','request'));
+    }
+
     /**
      * Display the registration view.
      *
@@ -30,6 +42,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -49,5 +62,24 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function changePicture(Request $request){
+
+        $request->validate([
+            'profilePicture'=> 'image|max:1999|nullable',
+        ]);
+
+        $user = User::find(request()->user()->id);
+
+        if($request->hasFile('profilePicture')){
+            $picture = $request->file('profilePicture')->getClientOriginalName();
+            $request->file('profilePicture')->storeAs('profilePictures', $request->user()->id. '/'. $picture,'');
+            $user-> profile_picture = $picture;
+        }
+
+        $user->save();
+
+        return back();
     }
 }

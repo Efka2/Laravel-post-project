@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Posts;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -29,6 +30,14 @@ class PostController extends Controller
     public function create()
     {
         return view('posts.create');
+    }
+
+    public function userPosts(User $user){
+
+        $posts = Post::latest()->with(['likes','user'])->
+                where('user_id', $user->id)->paginate(10);
+
+        return view('posts.userPosts',compact('posts','user'));
     }
 
     /**
@@ -82,9 +91,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        
+        $comments = Comment::latest()->with('user','likes','user')->where('post_id', $post->id)->get();
+        //return($comments);
+        
+        return view('posts.view',compact('post','comments'));
     }
 
     /**

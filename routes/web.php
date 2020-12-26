@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Posts\CommentsController;
 use App\Http\Controllers\Posts\LikeController;
+use App\Http\Controllers\Posts\CommentLikeController;
 use App\Http\Controllers\Posts\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,10 +26,22 @@ Route::get('/posts/create', [PostController::class,'create'])->name('posts.creat
 Route::delete('/posts/{post}/delete', [PostController::class,'destroy'])->name('post.delete')->middleware('auth');
 Route::post('/posts/create', [PostController::class,'store'])->name('posts.store')->middleware('auth');
 
+Route::post('/posts/{post}/like', [LikeController::class,'store'])->name('posts.like')->middleware('auth');
+Route::delete('/posts/{post}/like', [LikeController::class,'destroy'])->name('posts.unlike')->middleware('auth');
 
-Route::post('/posts/{post}/like', [LikeController::class,'store'])->name('post.like')->middleware('auth');
-Route::delete('/posts/{post}/unlike', [LikeController::class,'destroy'])->name('post.unlike')->middleware('auth');
+Route::get('/posts/{user:username}', [PostController::class,'userPosts'])
+        ->name('user.posts')
+        ->middleware('auth');
 
+Route::get('/posts/{post}/show', [PostController::class,'show'])
+        ->name('posts.view');
+
+Route::post('/posts/{post}/comment', [CommentsController::class,'store'])
+->name('posts.comment');
+
+Route::post('/posts/like/{comment}', [CommentLikeController::class,'store'])->name('comment.like');
+Route::delete('/posts/unlike/{comment}', [CommentLikeController::class,'destroy'])->name('comment.unlike');
+Route::delete('/posts/delete/{comment}', [CommentsController::class,'destroy'])->name('comment.delete');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

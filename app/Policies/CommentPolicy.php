@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PostPolicy
+class CommentPolicy
 {
     use HandlesAuthorization;
 
@@ -20,7 +20,7 @@ class PostPolicy
         //
     }
 
-    public function delete(User $user, Post $post){
-        return $post->user_id === $user->id;
+    public function delete(User $user, Comment $comment){
+        return $user->id === $comment->user_id;
     }
 }
