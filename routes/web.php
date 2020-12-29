@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AwardsController;
 use App\Http\Controllers\Posts\CommentsController;
 use App\Http\Controllers\Posts\LikeController;
 use App\Http\Controllers\Posts\CommentLikeController;
@@ -43,8 +44,32 @@ Route::post('/posts/like/{comment}', [CommentLikeController::class,'store'])->na
 Route::delete('/posts/unlike/{comment}', [CommentLikeController::class,'destroy'])->name('comment.unlike');
 Route::delete('/posts/delete/{comment}', [CommentsController::class,'destroy'])->name('comment.delete');
 
+Route::get('/awards', [AwardsController::class,'index'])
+        ->name('awards')
+        ->middleware('auth');
+
+Route::get('/awards/create', [AwardsController::class,'create'])
+                ->name('awards.create')
+                ->middleware('auth');
+
+Route::post('/awards/store', [AwardsController::class,'store'])
+                ->name('awards.store')
+                ->middleware('auth');
+
+Route::post('/post/{post}/award',[AwardsController::class,'chooseAward'])
+                ->name('award.chooseAward')
+                ->middleware('auth');
+
+ Route::get('/post/{post}/{award}',[AwardsController::class,'awardPost'])
+                ->name('award.post')
+                ->middleware('auth');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/award/{award}',[AwardsController::class,'buyAward'])
+                ->name('award.buy')
+                ->middleware('auth');
 
 require __DIR__.'/auth.php';

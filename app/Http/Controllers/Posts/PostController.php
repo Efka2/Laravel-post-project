@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Posts;
-
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Category;
+use App\Models\Award_Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -17,9 +19,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->with(['likes','user'])->paginate(10);
-        
-        return view('posts.index', compact('posts'));
+        $posts = Post::latest()->with(['comments','likes','user','category','awards'])->paginate(10);
+
+
+        return view('posts.index',compact('posts'));
     }
 
     /**
@@ -29,7 +32,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+        return view('posts.create',compact('categories'));
     }
 
     public function userPosts(User $user){
@@ -50,37 +54,22 @@ class PostController extends Controller
     {
         $this->validate($request ,[
             'body' => 'nullable|max:500',
-            'picture'=> 'image|max:1999|nullable'
+            'picture'=> 'image|max:1999|nullable',
+
         ]);
-        
-        /* if($request->hasfile('picture')){
-            $news->nuotrauka = file_get_contents($request->file('nuotrauka'));
-        } */
-        
+
         $post = new Post();
-        //dd($request->user());
-        
 
         if($request->hasfile('picture')){
             $picture = $request->file('picture')->getClientOriginalName();
             $request->file('picture')->storeAs('avatars', $request->user()->id. '/'. $picture,'');
             $post-> picture = $picture;
         }
+        $post-> category_id = $request->input("category");
         $post -> body = $request->input("body");
         $post -> header = $request->input("header");
         $post -> user_id = $request-> user()->id;
         $post->save();
-
-        /* $request-> user()->posts()->create([
-            
-            
-            'body'=>$request->body,
-        ]); */
-
-       /*  Post::create([
-            'body' => $request->body,
-            'users_id' =>$request->user()->id,
-        ]); */
 
         return redirect('posts');
     }
@@ -93,10 +82,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        
+
         $comments = Comment::latest()->with('user','likes','user')->where('post_id', $post->id)->get();
         //return($comments);
-        
+
         return view('posts.view',compact('post','comments'));
     }
 

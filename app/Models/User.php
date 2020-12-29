@@ -43,6 +43,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $with = ['role'];
+
     public function posts(){
         return $this->hasMany(Post::class);
     }
@@ -55,8 +57,16 @@ class User extends Authenticatable
         return $this->hasManyThrough(CommentLike::class, Comment::class);
     }
 
-   public function comments(){
-       return $this->hasMany(Comment::class);
-   }
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
     
+    public function role(){
+        return $this->belongsTo(Role::class);
+    }
+
+    public function awards(){
+        return $this->hasMany(Award::class);
+    }
+
 }

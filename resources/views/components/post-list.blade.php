@@ -10,7 +10,7 @@
         </div>
         <div class="inline-block">
             <a style="color:blue" href=" {{route('user.profile', $post->user )}} ">{{$post->user->username}}</a>
-            {{$post->created_at -> diffForHumans() }}
+            {{$post->created_at -> diffForHumans() }}  <span class="bg-gray-400 ml-1 p-1 rounded-lg">{{$post->category->name}}</span>
         </div>
     </div>
         <h1 class=" text-4xl font-semibold mb-2 ">{{$post->header}}</h1></br>
@@ -30,7 +30,7 @@
                     View
                 </button></a>
             </div>
-            <div class="inline-block">
+            <div class="">
             <!--LIKE-->
             @if( !$post->isLiked(auth()->user()) )
                 <form  action="{{route('posts.like',$post)}}" method="POST">
@@ -45,40 +45,54 @@
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="bg-gray-600 text-white font-bold py-2 px-4 hover:bg-gray-400 rounded">Unlike </button>
-                    <span> {{$post->likes->count()}} {{Str::plural('like',$post->likes->count())}} </span>
+                    <span class="mr-4"> {{$post->likes->count()}} {{Str::plural('like',$post->likes->count())}} </span>
                 </form>
             @endif
-                <!--DELETE-->
-                @can('delete', $post)
-                    <form onclick="confirmation()" action="{{route('post.delete', $post)}}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button  type="submit" class="mx-4 bg-red-600 text-white font-bold py-2 px-4 hover:bg-red-400 rounded">Delete</button>
-                    </form>
-                    <i class="fa fa-trash"></i>
-                @endcan
-                </div>
-                <div class="ml-4">
-                    comments {{$post->comments->count()}}
-                </div>
         </div>
-        <div class="">
-            @if ($post->awards->count())
+        <div style="margin:auto 0">
+            <div class="ml-2"> comments: {{$post->comments->count()}}</div>
+        </div>
+                <!--Award-->
+            <form  action="{{route('award.chooseAward',$post)}}" method="POST">
+                @csrf
+                <button  type="submit" class="bg-gray-600 text-white font-bold py-2 px-4 hover:bg-gray-400 rounded">Award <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                </button>
+                <span>  </span>
+            </form>
+
+        <div class="flex-justify-end">
+                <!--DELETE-->
+            @can('delete', $post)
+                <form onclick="confirmDelete()" action="{{route('post.delete', $post)}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button  type="submit" class="mx-4 bg-red-600 text-white font-bold py-2 px-4 hover:bg-red-400 rounded">Delete</button>
+                </form>
+                <i class="fa fa-trash"></i>
+            @endcan
+        </div>
+                
+        </div>
+        <div class="inline">
             Awards:
-                @foreach ($post->awards as $award)
-                    <img style="width:7%" src=" {{ url( 'storage/awards', [$award->name , $award->picture])}} " />
-                @endforeach
-
-            @endif
-
+            
+            @foreach ($post->awards()->distinct()->get() as $award)
+                <img  class="mr-4 inline-block border-solid border-4 border-light-blue-500"style="margin:0 auto;width: 14%" src="  {{url( 'storage/awards', [$award->name , $award->picture])}} " />
+                <span class="font-bold">{{$award->pivot->where('award_id',$award->id)->count()}}</span>
+            
+            @endforeach
+           
         </div>
 </div>
 
 <script>
-    function confirmation(){
+    function confirmDelete(){
         if(confirm("Are you sure you want to delete this post?")){
 
         }
         else event.preventDefault();
     }
+    /*
+      <img class="mr-4 inline-block " 
+                    style="width: 7%" src="  url( 'storage/awards', [$award->name , $award->picture]) " />*/
 </script>

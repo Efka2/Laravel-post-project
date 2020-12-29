@@ -45,13 +45,21 @@
                 @foreach ($comments as $comment)
                     <div class="relative  justify-end  rounded-lg  my-5 p-6 bg-white border-b border-gray-200">
                         
-                        <div class="text-xl absolute left-0 top-0 ml-4 my-3">
-                            <a href="{{route('user.profile', $comment->user )}}">{{$comment->user->username}}</a>
-                        
-                            <span class="ml-4"> {{$comment->created_at->diffForHumans()}} </span>   
+                        <div class="text-lg absolute left-0 top-0 ml-4 my-3">
+                            <a href="{{route('user.profile', $comment->user )}}">{{$comment->user->username}}</a> {{$comment->created_at->diffForHumans()}} 
                         </div>
-                        <div class="text-xl  bg-gray-300 my-6 p-3 rounded-lg">  {{$comment->body}} </div>
 
+                        <div class="my-7 flex">
+                            <div>
+                                @if ($comment->user->profile_picture)
+                                    <img class="mr-4 rounded-full" style="width: 110px" src=" {{ url( 'storage/profilePictures', [$comment->user->id , $comment->user->profile_picture])}} " />
+                                @else
+                                    <img class="mr-4 rounded-full" style="width: 110px" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.watsonmartin.com%2Fwp-content%2Fuploads%2F2016%2F03%2Fdefault-profile-picture.jpg&f=1&nofb=1" />
+                                @endif
+                            </div>
+                        
+                            <div class="text-xl bg-gray-300 my-6 p-3 rounded-lg">  {{$comment->body}} </div>
+                        </div>
                         @if (!$comment->isLiked(auth()->user()))
                             <form  action=" {{route('comment.like',$comment )}} " method="POST">
                                 @csrf
@@ -72,7 +80,7 @@
                             <form onclick="confirmation()" action="{{route('comment.delete', $comment)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button onclick="confirmation()" type="submit" class="bg-red-600 text-white font-bold py-2 px-4 hover:bg-red-400 rounded">Delete</button>
+                                <button  type="submit" class="bg-red-600 text-white font-bold py-2 px-4 hover:bg-red-400 rounded">Delete</button>
                             </form>
                             <i class="fa fa-trash"></i>
                         @endcan

@@ -35,6 +35,16 @@
             </div>
 
             <div>
+                <x-label class="mt-3" for="category" :value="__('Category')" />
+                
+                <select name="category" id="category">
+                    @foreach($categories as $category)
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
                 <x-label class="mt-3" for="body" :value="__('Post body!')" />
                 <textarea class="block mt-1 w-full mb-3" name="body" rows="20" cols="22" placeholder="Post something!"></textarea>
             </div>
