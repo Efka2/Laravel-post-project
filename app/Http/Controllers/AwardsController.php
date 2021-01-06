@@ -60,6 +60,7 @@ class AwardsController extends Controller
 
         $this->destroyAward($award->id);
 
+        
         $award_post = new Award_Post;
 
 
